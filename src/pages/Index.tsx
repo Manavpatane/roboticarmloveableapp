@@ -7,8 +7,8 @@ import { Info } from 'lucide-react';
 const Index = () => {
   const [joints, setJoints] = useState({
     base: 0,
-    shoulder: 15,
-    elbow: 10,
+    shoulder: 0,
+    elbow: 0,
     wrist: 0,
   });
 

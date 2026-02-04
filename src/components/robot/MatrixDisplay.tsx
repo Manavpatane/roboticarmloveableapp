@@ -10,7 +10,7 @@ interface MatrixDisplayProps {
 }
 
 // Calculate forward kinematics for the end effector position
-// This arm hangs downward, so we adjust the kinematics accordingly
+// Vertical arm structure with stepper motors
 const calculateEndEffector = (joints: MatrixDisplayProps['joints']) => {
   const { base, shoulder, elbow, wrist } = joints;
   
@@ -20,23 +20,19 @@ const calculateEndEffector = (joints: MatrixDisplayProps['joints']) => {
   const e = (elbow * Math.PI) / 180;
   const w = (wrist * Math.PI) / 180;
   
-  // Link lengths (matching the new wooden arm model)
-  const L1 = 4.1;  // Base height to shoulder joint
-  const L2 = 3.0;  // Shoulder to elbow (main arm)
-  const L3 = 2.0;  // Elbow to wrist (lower arm)
-  const L4 = 0.7;  // Wrist to gripper tip
+  // Link lengths matching the wooden arm model
+  const L1 = 4.85;  // Height to top of post
+  const L2 = 1.4;   // Top motor to bottom motor
+  const L3 = 1.2;   // Bottom motor to gripper mount
+  const L4 = 0.7;   // Gripper length
   
-  // Forward kinematics - arm hangs down so angles work differently
-  // Shoulder angle pivots the arm, elbow bends, wrist rotates gripper
+  // Forward kinematics for vertical articulated arm
   const armAngle = s + e + w;
   
-  // For a vertical hanging arm structure
-  const horizontalReach = L2 * Math.sin(s) + L3 * Math.sin(s + e) + L4 * Math.sin(armAngle);
-  const verticalDrop = L2 * Math.cos(s) + L3 * Math.cos(s + e) + L4 * Math.cos(armAngle);
-  
-  const x = Math.cos(b) * horizontalReach;
-  const y = L1 - verticalDrop;
-  const z = Math.sin(b) * horizontalReach;
+  // Calculate end effector position
+  const x = Math.cos(b) * (L4 * Math.sin(armAngle));
+  const y = L1 - L2 - L3 - L4 * Math.cos(armAngle);
+  const z = Math.sin(b) * (L4 * Math.sin(armAngle));
   
   return { x, y, z };
 };
