@@ -11,13 +11,14 @@ interface RobotArmProps {
   };
 }
 
-// Steel blue color for arm segments
-const ARM_COLOR = '#4a7eb0';
-// Orange color for joints
-const JOINT_COLOR = '#d4832f';
-// Dark gray for base and gripper
-const BASE_COLOR = '#3d5a80';
-const GRIPPER_COLOR = '#4a4a4a';
+// Wood color for main structure
+const WOOD_COLOR = '#a67c52';
+const WOOD_DARK = '#8b6914';
+// Metal/gray for hydraulic and joints
+const METAL_COLOR = '#7a7a7a';
+const METAL_DARK = '#4a4a4a';
+// Gripper color
+const GRIPPER_COLOR = '#5a4a3a';
 
 export const RobotArm = ({ joints }: RobotArmProps) => {
   const baseRef = useRef<THREE.Group>(null);
@@ -42,95 +43,105 @@ export const RobotArm = ({ joints }: RobotArmProps) => {
 
   return (
     <group>
-      {/* Base Platform */}
-      <mesh position={[0, -0.15, 0]}>
-        <cylinderGeometry args={[1.2, 1.4, 0.3, 32]} />
-        <meshStandardMaterial color={BASE_COLOR} metalness={0.6} roughness={0.4} />
+      {/* Wooden Base Platform */}
+      <mesh position={[0, -0.1, 0]}>
+        <boxGeometry args={[2.5, 0.2, 1.2]} />
+        <meshStandardMaterial color={WOOD_COLOR} roughness={0.8} />
       </mesh>
 
-      {/* Base Rotation Joint (J1) */}
+      {/* Base Rotation Group (J1) */}
       <group ref={baseRef}>
-        {/* Base Joint Cylinder */}
-        <mesh position={[0, 0.2, 0]}>
-          <cylinderGeometry args={[0.5, 0.5, 0.4, 32]} />
-          <meshStandardMaterial color={JOINT_COLOR} metalness={0.7} roughness={0.3} />
+        {/* Vertical Wooden Post */}
+        <mesh position={[0, 2, 0]}>
+          <boxGeometry args={[0.3, 4, 0.3]} />
+          <meshStandardMaterial color={WOOD_COLOR} roughness={0.8} />
         </mesh>
 
-        {/* Shoulder Mount */}
-        <mesh position={[0, 0.6, 0]}>
-          <boxGeometry args={[0.6, 0.5, 0.5]} />
-          <meshStandardMaterial color={ARM_COLOR} metalness={0.6} roughness={0.4} />
+        {/* Diagonal Support Brace */}
+        <mesh position={[0.8, 1.8, 0]} rotation={[0, 0, -0.7]}>
+          <boxGeometry args={[0.2, 3.8, 0.15]} />
+          <meshStandardMaterial color={WOOD_COLOR} roughness={0.8} />
+        </mesh>
+
+        {/* Top Joint Block */}
+        <mesh position={[0, 4.1, 0]}>
+          <boxGeometry args={[0.5, 0.3, 0.4]} />
+          <meshStandardMaterial color={METAL_COLOR} metalness={0.6} roughness={0.4} />
         </mesh>
 
         {/* Shoulder Joint (J2) */}
-        <group ref={shoulderRef} position={[0, 0.85, 0]}>
-          {/* Shoulder Joint Sphere */}
-          <mesh position={[0, 0, 0.35]}>
-            <sphereGeometry args={[0.3, 32, 32]} />
-            <meshStandardMaterial color={JOINT_COLOR} metalness={0.7} roughness={0.3} />
-          </mesh>
-          <mesh position={[0, 0, -0.35]}>
-            <sphereGeometry args={[0.3, 32, 32]} />
-            <meshStandardMaterial color={JOINT_COLOR} metalness={0.7} roughness={0.3} />
+        <group ref={shoulderRef} position={[0, 4.1, 0]}>
+          {/* Main Arm Segment (wooden beam) */}
+          <mesh position={[0, -1.5, 0.25]}>
+            <boxGeometry args={[0.25, 2.8, 0.2]} />
+            <meshStandardMaterial color={WOOD_COLOR} roughness={0.8} />
           </mesh>
 
-          {/* Upper Arm Segment */}
-          <mesh position={[1.5, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.15, 0.15, 2.6, 16]} />
-            <meshStandardMaterial color={ARM_COLOR} metalness={0.6} roughness={0.4} />
+          {/* Hydraulic Cylinder Mount */}
+          <mesh position={[-0.3, -0.3, 0]}>
+            <boxGeometry args={[0.15, 0.4, 0.3]} />
+            <meshStandardMaterial color={METAL_DARK} metalness={0.7} roughness={0.3} />
           </mesh>
 
-          {/* Elbow Joint Mount */}
-          <mesh position={[2.8, 0, 0]}>
-            <boxGeometry args={[0.4, 0.5, 0.7]} />
-            <meshStandardMaterial color={ARM_COLOR} metalness={0.6} roughness={0.4} />
+          {/* Hydraulic Cylinder (silver tube) */}
+          <mesh position={[-0.3, -1.4, 0]}>
+            <cylinderGeometry args={[0.08, 0.08, 2, 16]} />
+            <meshStandardMaterial color={METAL_COLOR} metalness={0.8} roughness={0.2} />
+          </mesh>
+
+          {/* Inner Hydraulic Rod */}
+          <mesh position={[-0.3, -2.2, 0]}>
+            <cylinderGeometry args={[0.04, 0.04, 0.8, 16]} />
+            <meshStandardMaterial color="#c0c0c0" metalness={0.9} roughness={0.1} />
+          </mesh>
+
+          {/* Elbow Joint Block */}
+          <mesh position={[0, -3, 0]}>
+            <boxGeometry args={[0.4, 0.25, 0.4]} />
+            <meshStandardMaterial color={METAL_COLOR} metalness={0.6} roughness={0.4} />
           </mesh>
 
           {/* Elbow Joint (J3) */}
-          <group ref={elbowRef} position={[2.9, 0, 0]}>
-            {/* Elbow Joint Sphere */}
-            <mesh position={[0, 0, 0.4]}>
-              <sphereGeometry args={[0.25, 32, 32]} />
-              <meshStandardMaterial color={JOINT_COLOR} metalness={0.7} roughness={0.3} />
-            </mesh>
-            <mesh position={[0, 0, -0.4]}>
-              <sphereGeometry args={[0.25, 32, 32]} />
-              <meshStandardMaterial color={JOINT_COLOR} metalness={0.7} roughness={0.3} />
-            </mesh>
-
+          <group ref={elbowRef} position={[0, -3, 0]}>
             {/* Lower Arm Segment */}
-            <mesh position={[1.3, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.12, 0.12, 2.2, 16]} />
-              <meshStandardMaterial color={ARM_COLOR} metalness={0.6} roughness={0.4} />
+            <mesh position={[0, -1, 0]}>
+              <boxGeometry args={[0.2, 1.8, 0.18]} />
+              <meshStandardMaterial color={WOOD_DARK} roughness={0.8} />
             </mesh>
 
-            {/* Wrist Mount */}
-            <mesh position={[2.4, 0, 0]}>
-              <boxGeometry args={[0.3, 0.35, 0.5]} />
-              <meshStandardMaterial color={ARM_COLOR} metalness={0.6} roughness={0.4} />
+            {/* Secondary Hydraulic/Cable */}
+            <mesh position={[-0.2, -0.8, 0]}>
+              <cylinderGeometry args={[0.025, 0.025, 1.4, 8]} />
+              <meshStandardMaterial color={METAL_DARK} metalness={0.5} roughness={0.5} />
+            </mesh>
+
+            {/* Wrist Joint Mount */}
+            <mesh position={[0, -2, 0]}>
+              <boxGeometry args={[0.3, 0.2, 0.3]} />
+              <meshStandardMaterial color={METAL_COLOR} metalness={0.6} roughness={0.4} />
             </mesh>
 
             {/* Wrist Joint (J4) */}
-            <group ref={wristRef} position={[2.55, 0, 0]}>
-              {/* Wrist Joint Sphere */}
-              <mesh>
-                <sphereGeometry args={[0.2, 32, 32]} />
-                <meshStandardMaterial color={JOINT_COLOR} metalness={0.7} roughness={0.3} />
-              </mesh>
-
+            <group ref={wristRef} position={[0, -2.1, 0]}>
               {/* Gripper Base */}
-              <mesh position={[0.5, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-                <cylinderGeometry args={[0.15, 0.2, 0.6, 16]} />
-                <meshStandardMaterial color={GRIPPER_COLOR} metalness={0.5} roughness={0.5} />
+              <mesh position={[0, -0.25, 0]}>
+                <boxGeometry args={[0.35, 0.3, 0.25]} />
+                <meshStandardMaterial color={GRIPPER_COLOR} roughness={0.7} />
               </mesh>
 
               {/* Gripper Fingers */}
-              <GripperFinger position={[0.9, 0.15, 0]} rotation={[0, 0, 0.2]} />
-              <GripperFinger position={[0.9, -0.15, 0]} rotation={[0, 0, -0.2]} />
+              <GripperFinger position={[0.12, -0.55, 0]} rotation={[0, 0, 0.15]} />
+              <GripperFinger position={[-0.12, -0.55, 0]} rotation={[0, 0, -0.15]} mirrored />
             </group>
           </group>
         </group>
       </group>
+
+      {/* Cable/Wire on floor */}
+      <mesh position={[0.5, -0.05, 0.4]} rotation={[0, 0.3, Math.PI / 2]}>
+        <torusGeometry args={[0.3, 0.02, 8, 16, Math.PI]} />
+        <meshStandardMaterial color="#c41e1e" roughness={0.6} />
+      </mesh>
     </group>
   );
 };
@@ -138,18 +149,22 @@ export const RobotArm = ({ joints }: RobotArmProps) => {
 interface GripperFingerProps {
   position: [number, number, number];
   rotation: [number, number, number];
+  mirrored?: boolean;
 }
 
-const GripperFinger = ({ position, rotation }: GripperFingerProps) => {
+const GripperFinger = ({ position, rotation, mirrored }: GripperFingerProps) => {
+  const xScale = mirrored ? -1 : 1;
   return (
     <group position={position} rotation={rotation}>
+      {/* Finger base */}
       <mesh>
-        <boxGeometry args={[0.5, 0.08, 0.15]} />
-        <meshStandardMaterial color={GRIPPER_COLOR} metalness={0.5} roughness={0.5} />
+        <boxGeometry args={[0.08, 0.35, 0.12]} />
+        <meshStandardMaterial color={GRIPPER_COLOR} roughness={0.7} />
       </mesh>
-      <mesh position={[0.25, -0.08, 0]} rotation={[0, 0, -0.3]}>
-        <boxGeometry args={[0.3, 0.08, 0.12]} />
-        <meshStandardMaterial color={GRIPPER_COLOR} metalness={0.5} roughness={0.5} />
+      {/* Finger tip (curved inward) */}
+      <mesh position={[0.03 * xScale, -0.22, 0]} rotation={[0, 0, 0.3 * xScale]}>
+        <boxGeometry args={[0.06, 0.15, 0.1]} />
+        <meshStandardMaterial color={METAL_DARK} metalness={0.5} roughness={0.5} />
       </mesh>
     </group>
   );
