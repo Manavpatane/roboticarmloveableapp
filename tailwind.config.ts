@@ -57,6 +57,20 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        robot: {
+          arm: "hsl(var(--robot-arm))",
+          joint: "hsl(var(--robot-joint))",
+          base: "hsl(var(--robot-base))",
+          gripper: "hsl(var(--robot-gripper))",
+        },
+        panel: {
+          bg: "hsl(var(--panel-bg))",
+          border: "hsl(var(--panel-border))",
+        },
+        slider: {
+          track: "hsl(var(--slider-track))",
+          thumb: "hsl(var(--slider-thumb))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
