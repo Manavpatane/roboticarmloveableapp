@@ -51,18 +51,42 @@ const calculateEndEffector = (joints: MatrixDisplayProps['joints']) => {
 export const MatrixDisplay = ({ joints }: MatrixDisplayProps) => {
   const position = useMemo(() => calculateEndEffector(joints), [joints]);
 
+  // Calculate rotation matrix components
+  const b = (joints.base * Math.PI) / 180;
+  const totalAngle = ((joints.shoulder + joints.elbow + joints.wrist) * Math.PI) / 180;
+  
+  const cosB = Math.cos(b);
+  const sinB = Math.sin(b);
+  const cosT = Math.cos(totalAngle);
+  const sinT = Math.sin(totalAngle);
+
   return (
     <div className="matrix-display">
-      <div className="text-muted-foreground mb-2">Matrix: Calculating \ftal {'{'}</div>
-      <div className="space-y-1 text-foreground/90">
-        <div>
-          request document <span className="text-primary">xdbVxWorld</span> | S[{position.x.toFixed(1)} 2]
+      <div className="text-muted-foreground mb-2 font-mono text-xs">Transformation Matrix T₀₄:</div>
+      <div className="space-y-0.5 text-foreground/90 font-mono text-xs bg-secondary/30 rounded p-2">
+        <div className="grid grid-cols-4 gap-1 text-center">
+          <span>{(cosB * cosT).toFixed(2)}</span>
+          <span>{(-cosB * sinT).toFixed(2)}</span>
+          <span>{sinB.toFixed(2)}</span>
+          <span className="text-primary">{position.x.toFixed(2)}</span>
         </div>
-        <div>
-          mn| 1 | Smk 2 | <span className="text-accent">fmt</span> FriseWorld | 8[{position.y.toFixed(1)} 2]
+        <div className="grid grid-cols-4 gap-1 text-center">
+          <span>{sinT.toFixed(2)}</span>
+          <span>{cosT.toFixed(2)}</span>
+          <span>0.00</span>
+          <span className="text-primary">{position.y.toFixed(2)}</span>
         </div>
-        <div>
-          decuest froument <span className="text-primary">natrixWorld</span> | ff[{position.z.toFixed(1)} 3]
+        <div className="grid grid-cols-4 gap-1 text-center">
+          <span>{(-sinB * cosT).toFixed(2)}</span>
+          <span>{(sinB * sinT).toFixed(2)}</span>
+          <span>{cosB.toFixed(2)}</span>
+          <span className="text-primary">{position.z.toFixed(2)}</span>
+        </div>
+        <div className="grid grid-cols-4 gap-1 text-center text-muted-foreground">
+          <span>0</span>
+          <span>0</span>
+          <span>0</span>
+          <span>1</span>
         </div>
       </div>
       <div className="mt-3 pt-3 border-t border-panel-border">
