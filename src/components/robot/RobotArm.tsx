@@ -136,16 +136,16 @@ export const RobotArm = ({ joints }: RobotArmProps) => {
                 {/* Wrist servo (J4) - visible */}
                 <ServoMotor position={[0.2, 0, 0]} rotation={[0, 0, Math.PI/2]} small />
 
-                {/* ============ WRIST ROTATION GROUP ============ */}
-                <group ref={wristRef}>
-                  {/* Gripper mount */}
-                  <mesh position={[0, 0.2, 0]}>
-                    <boxGeometry args={[0.25, 0.15, 0.25]} />
-                    <meshStandardMaterial color={WOOD_DARK} roughness={0.75} />
-                  </mesh>
+                 {/* ============ WRIST ROTATION GROUP ============ */}
+                 <group ref={wristRef}>
+                   {/* Bucket mount */}
+                   <mesh position={[0, 0.2, 0]}>
+                     <boxGeometry args={[0.25, 0.15, 0.25]} />
+                     <meshStandardMaterial color={WOOD_DARK} roughness={0.75} />
+                   </mesh>
 
-                  {/* Gripper assembly */}
-                  <Gripper position={[0, 0.35, 0]} />
+                   {/* Excavator Bucket */}
+                   <ExcavatorBucket position={[0, 0.35, 0]} />
                 </group>
               </group>
             </group>
@@ -261,54 +261,92 @@ const Screw = ({ position }: ScrewProps) => {
   );
 };
 
-// Gripper Component
-interface GripperProps {
+// Excavator Bucket Component
+interface ExcavatorBucketProps {
   position: [number, number, number];
 }
 
-const Gripper = ({ position }: GripperProps) => {
+const BUCKET_DARK = '#3a3a3a';
+const BUCKET_LIGHT = '#5a5a5a';
+const TEETH_COLOR = '#4a4a4a';
+
+const ExcavatorBucket = ({ position }: ExcavatorBucketProps) => {
   return (
     <group position={position}>
-      {/* Gripper base */}
-      <mesh>
-        <boxGeometry args={[0.3, 0.1, 0.2]} />
-        <meshStandardMaterial color={WOOD_MEDIUM} roughness={0.8} />
+      {/* Bucket back plate */}
+      <mesh position={[0, 0.25, -0.15]} rotation={[0.3, 0, 0]}>
+        <boxGeometry args={[0.5, 0.5, 0.05]} />
+        <meshStandardMaterial color={BUCKET_DARK} metalness={0.6} roughness={0.4} />
       </mesh>
 
-      {/* Left finger */}
-      <group position={[-0.1, 0.15, 0]} rotation={[0, 0, 0.15]}>
-        <mesh position={[0, 0.15, 0]}>
-          <boxGeometry args={[0.06, 0.3, 0.1]} />
-          <meshStandardMaterial color={WOOD_DARK} roughness={0.75} />
-        </mesh>
-        {/* Finger tip */}
-        <mesh position={[0.02, 0.32, 0]} rotation={[0, 0, -0.3]}>
-          <boxGeometry args={[0.05, 0.1, 0.08]} />
-          <meshStandardMaterial color={METAL_SILVER} metalness={0.6} roughness={0.4} />
-        </mesh>
-      </group>
-
-      {/* Right finger */}
-      <group position={[0.1, 0.15, 0]} rotation={[0, 0, -0.15]}>
-        <mesh position={[0, 0.15, 0]}>
-          <boxGeometry args={[0.06, 0.3, 0.1]} />
-          <meshStandardMaterial color={WOOD_DARK} roughness={0.75} />
-        </mesh>
-        {/* Finger tip */}
-        <mesh position={[-0.02, 0.32, 0]} rotation={[0, 0, 0.3]}>
-          <boxGeometry args={[0.05, 0.1, 0.08]} />
-          <meshStandardMaterial color={METAL_SILVER} metalness={0.6} roughness={0.4} />
-        </mesh>
-      </group>
-
-      {/* Gripper hinge screws */}
-      <mesh position={[-0.1, 0.05, 0.08]} rotation={[Math.PI/2, 0, 0]}>
-        <cylinderGeometry args={[0.02, 0.02, 0.04, 8]} />
-        <meshStandardMaterial color={SCREW_GOLD} metalness={0.8} roughness={0.2} />
+      {/* Bucket bottom (curved section) */}
+      <mesh position={[0, 0.05, 0.1]} rotation={[-0.5, 0, 0]}>
+        <boxGeometry args={[0.5, 0.08, 0.4]} />
+        <meshStandardMaterial color={BUCKET_DARK} metalness={0.6} roughness={0.4} />
       </mesh>
-      <mesh position={[0.1, 0.05, 0.08]} rotation={[Math.PI/2, 0, 0]}>
-        <cylinderGeometry args={[0.02, 0.02, 0.04, 8]} />
-        <meshStandardMaterial color={SCREW_GOLD} metalness={0.8} roughness={0.2} />
+
+      {/* Bucket front lip */}
+      <mesh position={[0, -0.05, 0.25]} rotation={[-0.8, 0, 0]}>
+        <boxGeometry args={[0.5, 0.06, 0.15]} />
+        <meshStandardMaterial color={BUCKET_LIGHT} metalness={0.5} roughness={0.5} />
+      </mesh>
+
+      {/* Left side plate */}
+      <mesh position={[-0.23, 0.15, 0.05]} rotation={[0, 0.15, 0]}>
+        <boxGeometry args={[0.05, 0.4, 0.35]} />
+        <meshStandardMaterial color={BUCKET_DARK} metalness={0.6} roughness={0.4} />
+      </mesh>
+
+      {/* Right side plate */}
+      <mesh position={[0.23, 0.15, 0.05]} rotation={[0, -0.15, 0]}>
+        <boxGeometry args={[0.05, 0.4, 0.35]} />
+        <meshStandardMaterial color={BUCKET_DARK} metalness={0.6} roughness={0.4} />
+      </mesh>
+
+      {/* Mounting brackets (top) */}
+      <mesh position={[-0.12, 0.45, -0.1]}>
+        <boxGeometry args={[0.08, 0.12, 0.15]} />
+        <meshStandardMaterial color={BUCKET_LIGHT} metalness={0.5} roughness={0.5} />
+      </mesh>
+      <mesh position={[0.12, 0.45, -0.1]}>
+        <boxGeometry args={[0.08, 0.12, 0.15]} />
+        <meshStandardMaterial color={BUCKET_LIGHT} metalness={0.5} roughness={0.5} />
+      </mesh>
+
+      {/* Mounting pins */}
+      <mesh position={[-0.12, 0.45, -0.02]} rotation={[0, 0, Math.PI/2]}>
+        <cylinderGeometry args={[0.03, 0.03, 0.1, 12]} />
+        <meshStandardMaterial color={METAL_SILVER} metalness={0.7} roughness={0.3} />
+      </mesh>
+      <mesh position={[0.12, 0.45, -0.02]} rotation={[0, 0, Math.PI/2]}>
+        <cylinderGeometry args={[0.03, 0.03, 0.1, 12]} />
+        <meshStandardMaterial color={METAL_SILVER} metalness={0.7} roughness={0.3} />
+      </mesh>
+
+      {/* Bucket teeth */}
+      {[-0.18, -0.09, 0, 0.09, 0.18].map((xPos, i) => (
+        <group key={i} position={[xPos, -0.12, 0.3]}>
+          {/* Tooth holder */}
+          <mesh rotation={[-0.6, 0, 0]}>
+            <boxGeometry args={[0.06, 0.08, 0.06]} />
+            <meshStandardMaterial color={BUCKET_LIGHT} metalness={0.5} roughness={0.5} />
+          </mesh>
+          {/* Tooth point */}
+          <mesh position={[0, -0.08, 0.04]} rotation={[-0.8, 0, 0]}>
+            <coneGeometry args={[0.025, 0.1, 4]} />
+            <meshStandardMaterial color={TEETH_COLOR} metalness={0.6} roughness={0.4} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* Reinforcement ribs on sides */}
+      <mesh position={[-0.2, 0.2, 0.1]} rotation={[0.3, 0.1, 0]}>
+        <boxGeometry args={[0.02, 0.25, 0.02]} />
+        <meshStandardMaterial color={BUCKET_LIGHT} metalness={0.5} roughness={0.5} />
+      </mesh>
+      <mesh position={[0.2, 0.2, 0.1]} rotation={[0.3, -0.1, 0]}>
+        <boxGeometry args={[0.02, 0.25, 0.02]} />
+        <meshStandardMaterial color={BUCKET_LIGHT} metalness={0.5} roughness={0.5} />
       </mesh>
     </group>
   );
