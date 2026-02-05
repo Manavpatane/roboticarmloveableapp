@@ -7,9 +7,9 @@ import { Info } from 'lucide-react';
 const Index = () => {
   const [joints, setJoints] = useState({
     base: 0,
-    shoulder: 0,
-    elbow: 0,
-    wrist: 0,
+    shoulder: 45,
+    elbow: -15,
+    wrist: 30,
   });
 
   const handleJointChange = (joint: string, value: number) => {
@@ -42,7 +42,7 @@ const Index = () => {
       </div>
 
       {/* Matrix Display */}
-      <div className="absolute top-[280px] left-4 z-10 w-72">
+      <div className="absolute top-[300px] left-4 z-10 w-72">
         <MatrixDisplay joints={joints} />
       </div>
 

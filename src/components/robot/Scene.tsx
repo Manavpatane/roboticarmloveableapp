@@ -14,7 +14,7 @@ interface SceneProps {
 export const Scene = ({ joints }: SceneProps) => {
   return (
     <Canvas
-      camera={{ position: [4, 3, 6], fov: 45 }}
+      camera={{ position: [6, 5, 8], fov: 45 }}
       gl={{ antialias: true }}
       style={{ background: '#d4cfc5' }}
     >
@@ -34,27 +34,27 @@ export const Scene = ({ joints }: SceneProps) => {
 
       {/* Floor (green table surface like in the image) */}
       <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[12, 12]} />
+        <planeGeometry args={[15, 15]} />
         <meshStandardMaterial color="#5d9a6e" roughness={0.85} />
       </mesh>
 
       {/* Background wall */}
-      <mesh position={[0, 4, -3]} rotation={[0, 0, 0]}>
-        <planeGeometry args={[15, 10]} />
+      <mesh position={[0, 5, -5]} rotation={[0, 0, 0]}>
+        <planeGeometry args={[20, 12]} />
         <meshStandardMaterial color="#d8d0c4" roughness={0.95} />
       </mesh>
 
       {/* Subtle grid on floor */}
       <Grid
         position={[0, 0.01, 0]}
-        args={[12, 12]}
+        args={[15, 15]}
         cellSize={0.5}
         cellThickness={0.2}
         cellColor="#4a8a5a"
         sectionSize={2}
         sectionThickness={0.4}
         sectionColor="#3a7a4a"
-        fadeDistance={15}
+        fadeDistance={20}
         fadeStrength={1}
         followCamera={false}
       />
@@ -68,8 +68,8 @@ export const Scene = ({ joints }: SceneProps) => {
         enableZoom={true}
         enableRotate={true}
         minDistance={3}
-        maxDistance={15}
-        target={[0, 2.5, 0]}
+        maxDistance={20}
+        target={[0, 4, 0]}
       />
     </Canvas>
   );
