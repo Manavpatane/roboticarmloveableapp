@@ -144,8 +144,10 @@ export const RobotArm = ({ joints }: RobotArmProps) => {
                      <meshStandardMaterial color={WOOD_DARK} roughness={0.75} />
                    </mesh>
 
-                   {/* Excavator Bucket */}
-                   <ExcavatorBucket position={[0, 0.35, 0]} />
+                   {/* Excavator Bucket - rotated to align vertically like JCB */}
+                   <group position={[0, 0.35, 0]} rotation={[Math.PI, 0, 0]}>
+                     <ExcavatorBucket position={[0, 0, 0]} />
+                   </group>
                 </group>
               </group>
             </group>
